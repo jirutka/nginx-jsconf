@@ -14,19 +14,24 @@ jobs:
 
       - run: npm clean-install
 
-      - run: npm run build
+      - run: npm run bundle
 
       - name: Upload to Releases
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/*.mjs
             dist/*.mjs.map
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   npmjs:
     name: Publish on npmjs
+    # It doesn't depend on releases, but we want to run this after the releases
+    # job succeeded.
+    needs:
+      - releases
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

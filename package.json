@@ -1,6 +1,6 @@
 {
   "name": "nginx-jsconf",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A library and a CLI tool to convert nginx configuration from YAML or JSON to nginx configuration format.",
   "author": {
     "name": "Jakub Jirutka",

@@ -9,7 +9,7 @@ import { streamToString } from './utils.js'
 import { NgxBaseError } from './errors.js'
 
 const PROG_NAME = 'nginx-confjs'
-const PROG_VERSION = '0.0.0'
+const PROG_VERSION = '0.1.1'
 
 const HELP = `\
 Usage: ${PROG_NAME} [options] [<file>]

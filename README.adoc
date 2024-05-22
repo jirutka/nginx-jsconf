@@ -1,7 +1,7 @@
 = nginx-jsconf
 :npm-name: nginx-jsconf
 :gh-name: jirutka/{npm-name}
-:version: 0.1.1
+:version: 0.1.2
 :releases-uri: https://github.com/{gh-name}/releases/download/v{version}
 
 ifdef::env-github[]

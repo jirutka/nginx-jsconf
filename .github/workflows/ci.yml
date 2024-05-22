@@ -1,0 +1,36 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: npm install
+
+      - run: npm run test
+
+      - run: npm run typecheck
+      - run: npm run stylecheck
+
+      - run: npm run build
+      - run: node lib/cli.js --help
+
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: npm install
+
+      - run: npm run bundle
+      - run: ls -lah dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nginx-jsconf
+          path: dist/*
+          if-no-files-found: error

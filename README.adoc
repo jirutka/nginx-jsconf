@@ -1,0 +1,110 @@
+= nginx-jsconf
+:npm-name: nginx-jsconf
+:gh-name: jirutka/{npm-name}
+
+ifdef::env-github[]
+image:https://github.com/{gh-name}/workflows/CI/badge.svg[Build Status, link=https://github.com/{gh-name}/actions?query=workflow%3A%22CI%22]
+image:https://img.shields.io/npm/v/{npm-name}.svg[npm Version, link="https://www.npmjs.org/package/{npm-name}"]
+endif::env-github[]
+
+This project provides a JavaScript library and a CLI tool to convert nginx configuration from YAML or JSON format to nginx configuration format, as well as functions to traverse and transform the configuration.
+
+See https://github.com/jirutka/nginx-json-schema[jirutka/nginx-json-schema] for description of the YAML/JSON format.
+
+
+== Installation
+
+=== Using npm
+
+[source, sh, subs="+attributes"]
+npm install --global {npm-name}
+
+
+== Examples
+
+=== CLI: Convert configuration from YAML to nginx format
+
+[source, sh]
+nginx-jsconf --context main --out nginx.conf nginx.yml
+
+
+=== JavaScript: Convert JS(ON) object to nginx format
+
+[source, js, subs="+attributes"]
+----
+import { stringify } from '{npm-name}'
+
+const config = {
+  server: [
+    {
+      listen: '443 http2 ssl',
+      server_name: 'example.org',
+      allow: [
+        '127.0.0.1/8',
+        '10.12.0.0/16',
+      ],
+      deny: 'all',
+      location: {
+        '/': {
+          proxy_pass: 'http://1.2.3.4',
+          proxy_set_header: {
+            Host: '$http_host',
+            'X-Forwarded-For': '$proxy_add_x_forwarded_for',
+            'X-Forwarded-Host': '$host',
+          },
+          proxy_buffering: false,
+        },
+        '~ \\.(?:css|js)$': {
+          add_header: {
+            'Cache-Control': '"max-age=31556952, public"',
+          }
+        }
+      }
+    }
+  ]
+}
+
+console.log(stringify('http', config, { indentation: 4 }))
+----
+
+
+=== JavaScript: Transform configuration
+
+[source, js, subs="+attributes"]
+----
+import { transform } from '{npm-name}'
+
+const addProxyHeadersTransformer = {
+  name: ['server', 'location', 'if'],
+  block: true,
+  if: context => 'proxy_pass' in context,
+  transform: context => ({
+    ...context,
+    proxy_set_header: {
+      ...context.proxy_set_header,
+      'X-Forwarded-For': '$proxy_add_x_forwarded_for',
+      'X-Forwarded-Host': '$host',
+    }
+  })
+}
+
+const adjustIncludePathTransformer = {
+  name: 'include',
+  context: ['server', 'location'],
+  block: false,
+  transform: value => {
+    const values = Array.isArray(value) ? value : [value]
+    return values.map(name => `/etc/nginx/incl/${name}.conf`)
+  }
+}
+
+const newConfig = transform('main', config, [
+  addProxyHeadersTransformer,
+  adjustIncludePathTransformer,
+])
+----
+
+
+== License
+
+This project is licensed under https://opensource.org/license/mit/[MIT License].

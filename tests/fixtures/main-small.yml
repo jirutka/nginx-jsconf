@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://jirutka.github.io/nginx-json-schema/nginx-full.json
+pcre_jit: on
+
+events:
+  worker_connections: 4096
+
+http:
+  server:
+    - listen: 443 ssl
+      allow:
+        - 127.0.0.1
+        - ::1
+      add_header:
+        - Cache-Control private
+      proxy_set_header:
+        Host: $http_host
+        Forwarded: $proxy_add_forwarded
+      location:
+        '~ ^/api/v[0-9]+/':
+          output_buffers: 1 64k
+          autoindex: true
+        /:
+          internal: null

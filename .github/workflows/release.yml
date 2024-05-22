@@ -1,0 +1,47 @@
+name: Release
+on:
+  push:
+    tags: v*
+
+jobs:
+  releases:
+    name: Upload to Releases
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: npm clean-install
+
+      - run: npm run build
+
+      - name: Upload to Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*.mjs
+            dist/*.mjs.map
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  npmjs:
+    name: Publish on npmjs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: sudo apt-get install asciidoctor pandoc
+      - run: npm clean-install
+
+      - run: npm run build
+
+      - name: Set up .npmrc file
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

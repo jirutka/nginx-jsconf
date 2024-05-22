@@ -16,12 +16,17 @@ jobs:
 
       - run: npm run bundle
 
+      - name: Generate checksums.txt
+        run: shasum -a 256 * > checksums.txt
+        working-directory: dist
+
       - name: Upload to Releases
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/*.mjs
             dist/*.mjs.map
+            dist/checksums.txt
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

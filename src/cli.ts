@@ -8,7 +8,7 @@ import { stringify } from './stringify.js'
 import { streamToString } from './utils.js'
 import { NgxBaseError } from './errors.js'
 
-const PROG_NAME = 'nginx-confjs'
+const PROG_NAME = 'nginx-jsconf'
 const PROG_VERSION = '0.1.1'
 
 const HELP = `\
@@ -32,7 +32,7 @@ Options:
   -V --version           Print program name & version and exit.
   -h --help              Print this message and exit.
 
-Report issues at <https://github.com/jirutka/nginx-confjs/issues>.
+Report issues at <https://github.com/jirutka/nginx-jsconf/issues>.
 `
 
 async function readFile(filepath: string, format?: string): Promise<unknown> {

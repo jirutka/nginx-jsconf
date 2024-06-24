@@ -72,13 +72,22 @@ const config = {
     // Add shebang and set the executable bit.
     executable(),
   ],
-  output: {
-    dir: './dist',
-    entryFileNames: 'nginx-jsconf.mjs',
-    format: 'es',
-    inlineDynamicImports: true,
-    sourcemap: true,
-  },
+  output: [
+    {
+      dir: './dist',
+      entryFileNames: 'nginx-jsconf.mjs',
+      format: 'esm',
+      inlineDynamicImports: true,
+      sourcemap: true,
+    },
+    {
+      dir: './dist',
+      entryFileNames: 'nginx-jsconf.cjs',
+      format: 'commonjs',
+      inlineDynamicImports: true,
+      sourcemap: true,
+    },
+  ],
 }
 
 export default config

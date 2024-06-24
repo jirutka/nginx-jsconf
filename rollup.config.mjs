@@ -60,6 +60,7 @@ const config = {
     // Strip comments etc.
     cleanup({
       comments: 'none',
+      extensions: ['.js', '.mjs', '.ts'],
     }),
     // Generate license banner and prepend it to the bundle.
     license({

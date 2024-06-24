@@ -27,9 +27,9 @@ npm install --global {npm-name}
 {npm-name} is also provided as a single JavaScript file with bundled dependencies, requiring only Node.js (version 18 or later) on the system.
 
 [source, sh, subs="+attributes"]
-curl -LO  {releases-uri}/{npm-name}.mjs
+curl -LO  {releases-uri}/{npm-name}.cjs
 curl -fsSL {releases-uri}/checksums.txt | sha256sum -c --ignore-missing
-install -D -m755 {npm-name}.mjs -t /usr/local/bin/
+install -D -m755 {npm-name}.cjs /usr/local/bin/{npm-name}
 
 
 == Examples
